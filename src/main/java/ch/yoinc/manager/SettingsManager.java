@@ -12,7 +12,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class SettingsManager {
-    private static final String SETTINGS_PATH = "C:\\ProgramData\\TwitchAssistant";
+
+    private static String OS;
+    private static String SETTINGS_PATH;
     private static final String SETTINGS_FILE_NAME = "settings.json";
     private static SettingsManager instance;
 
@@ -30,8 +32,18 @@ public class SettingsManager {
     }
 
     private Settings loadSettings() {
-        Path settingsPath = Paths.get(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME);
-        File settingsFile = new File(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME);
+        OS = System.getProperty("os.name");
+        Path settingsPath;
+        File settingsFile;
+        if(OS.startsWith("Windows")) {
+            SETTINGS_PATH = "C:\\ProgramData\\YOINC\\TwitchAssistant";
+            settingsPath = Paths.get(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME);
+            settingsFile = new File(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME);
+        } else {
+            SETTINGS_PATH = System.getProperty("user.home") + "/YOINC/TwitchAssistant";
+            settingsPath = Paths.get(SETTINGS_PATH + "/" + SETTINGS_FILE_NAME);
+            settingsFile = new File(SETTINGS_PATH + "/" + SETTINGS_FILE_NAME);
+        }
 
         try {
             if (Files.exists(settingsPath)) {
@@ -51,7 +63,6 @@ public class SettingsManager {
             System.out.println("Fata error: " + exception.getMessage());
             settings = new Settings("","","",false,new ArrayList<Assistant>());
         }
-
         return settings;
     }
 
@@ -63,14 +74,24 @@ public class SettingsManager {
     private static void saveSettings(Settings settings, boolean createFolder) {
         if(createFolder) {
             File folder = new File(SETTINGS_PATH);
-            folder.mkdir();
+            System.out.println(folder.mkdirs());
         }
-        try (FileWriter file = new FileWriter(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME)) {
-            file.write(new Gson().toJson(settings));
-            System.out.println("Default settings saved.");
-        } catch (IOException e) {
-            System.err.println("Error saving settings: " + e.getMessage());
+        if(OS.startsWith("Windows")) {
+            try (FileWriter file = new FileWriter(SETTINGS_PATH + "\\" + SETTINGS_FILE_NAME)) {
+                file.write(new Gson().toJson(settings));
+                System.out.println("Default settings saved.");
+            } catch (IOException e) {
+                System.err.println("Error saving settings: " + e.getMessage());
+            }
+        } else {
+            try (FileWriter file = new FileWriter(SETTINGS_PATH + "/" + SETTINGS_FILE_NAME)) {
+                file.write(new Gson().toJson(settings));
+                System.out.println("Default settings saved.");
+            } catch (IOException e) {
+                System.err.println("Error saving settings: " + e.getMessage());
+            }
         }
+
     }
 
     public void saveSettingsOnClose() {
