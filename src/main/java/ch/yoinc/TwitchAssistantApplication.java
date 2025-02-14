@@ -1,5 +1,6 @@
 package ch.yoinc;
 
+import ch.yoinc.manager.SettingsManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +15,19 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class TwitchAssistantApplication extends Application {
-    @Override
+
+    @Override   
     public void start(Stage stage) throws Exception {
+
+        SettingsManager.getInstance();
+
+        stage.setOnCloseRequest(windowEvent -> {
+            SettingsManager.getInstance().saveSettingsOnClose();
+        });
 
         FXMLLoader fxmlLoader = new FXMLLoader(TwitchAssistantApplication.class.getResource("dashboard.fxml"));
         fxmlLoader.setResources(ResourceBundle.getBundle("texts"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 1000);
         String font = getClass().getResource("/css/application.css").toExternalForm();
         scene.getStylesheets().add(font);
 

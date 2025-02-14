@@ -1,23 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.yoinc.controller.DashboardController">
-    <center>
-    </center>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextArea?>
+<BorderPane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.yoinc.controller.DashboardController">
     <top>
-        <VBox prefHeight="87.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <VBox fx:id="northComponent" prefHeight="87.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="TOP_CENTER" spacing="20" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button fx:id="settings" alignment="TOP_CENTER" mnemonicParsing="false" text="%settings" />
+                        <Button fx:id="settings" alignment="TOP_CENTER" mnemonicParsing="false" text="settings" />
+                        <Button fx:id="reset" alignment="TOP_CENTER" mnemonicParsing="false" text="test (reset)" onAction="#test"/>
                     </children>
                 </HBox>
             </children>
         </VBox>
     </top>
+
+    <bottom>
+        <VBox fx:id="southComponent" disable="true" prefHeight="87.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="BOTTOM_CENTER" spacing="20" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button fx:id="read_chat" alignment="BOTTOM_CENTER" mnemonicParsing="false" text="%read_chat" />
+                        <Button fx:id="record_voice" alignment="BOTTOM_CENTER" mnemonicParsing="false" text="%button_start_recording" onAction="#handleVoiceRecording"/>
+                        <Button fx:id="return_audio" alignment="BOTTOM_CENTER" mnemonicParsing="false" text="%return_audio" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </bottom>
+
+    <left>
+        <VBox fx:id="westComponent" disable="true" alignment="TOP_LEFT" spacing="10" prefWidth="500">
+            <HBox spacing="10">
+                <ComboBox fx:id="assistantsComboBox" promptText="Select an assistant" prefWidth="400"/>
+                <Button fx:id="newAssistantButton" text="New" />
+            </HBox>
+            <TextArea fx:id="assistantDescriptionTextArea" editable="false" prefHeight="500" prefWidth="500" wrapText="true"/>
+            <HBox spacing="10">
+                <Button fx:id="editButton" text="Edit"/>
+                <Button fx:id="saveButton" text="Save" disable="true"/>
+                <Button fx:id="deleteButton" text="Delete" disable="true"/>
+            </HBox>
+        </VBox>
+    </left>
+
+    <right>
+        <ScrollPane fx:id="eastComponent" disable="true" prefWidth="400.0" prefHeight="400.0" BorderPane.alignment="CENTER">
+            <content>
+                <VBox fx:id="chatbox">
+                    <children>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </right>
 </BorderPane>
