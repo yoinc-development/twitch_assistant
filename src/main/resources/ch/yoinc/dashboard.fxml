@@ -14,8 +14,8 @@
             <children>
                 <HBox alignment="TOP_CENTER" spacing="20" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button fx:id="settings" alignment="TOP_CENTER" mnemonicParsing="false" text="settings" />
-                        <Button fx:id="reset" alignment="TOP_CENTER" mnemonicParsing="false" text="test (reset)" onAction="#test"/>
+                        <Button fx:id="settings" alignment="TOP_CENTER" mnemonicParsing="false" text="settings" onAction="#handleSettings"/>
+                        <Button fx:id="reset" alignment="TOP_CENTER" mnemonicParsing="false" text="reset"/>
                     </children>
                 </HBox>
             </children>

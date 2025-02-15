@@ -1,11 +1,16 @@
 package ch.yoinc.controller;
 
+import ch.yoinc.TwitchAssistantApplication;
 import ch.yoinc.manager.SettingsManager;
 import ch.yoinc.model.Assistant;
 import ch.yoinc.service.SpeechToTextService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ public class DashboardController {
     @FXML VBox westComponent;
     @FXML ScrollPane eastComponent;
     @FXML Button record_voice;
+    @FXML Button read_chat;
     @FXML VBox chatbox;
     @FXML ComboBox assistantsComboBox;
     @FXML TextArea assistantDescriptionTextArea;
@@ -81,7 +87,7 @@ public class DashboardController {
             speechToTextService.startRecording();
             record_voice.setText(bundle.getString("button_stop_recording"));
 
-            northComponent.setDisable(true);
+            //northComponent.setDisable(true);
             westComponent.setDisable(true);
 
         } else {
@@ -110,6 +116,44 @@ public class DashboardController {
 
         messageBox.getChildren().addAll(usernameLabel, messageContentLabel);
         chatbox.getChildren().add(messageBox);
+    }
+
+    @FXML
+    public void initialize() {
+
+        //handle all buttons with dependencies from settings
+        if(!SettingsManager.getInstance().getSettings().isTa_google_credential_set()) {
+            record_voice.setDisable(true);
+        }
+
+        if(SettingsManager.getInstance().getSettings().getTa_api_twitch().isEmpty()) {
+            read_chat.setDisable(true);
+        }
+
+        test();
+    }
+
+    @FXML
+    public void handleSettings() {
+        try {
+            northComponent.setDisable(true);
+            eastComponent.setDisable(true);
+            southComponent.setDisable(true);
+            westComponent.setDisable(true);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(TwitchAssistantApplication.class.getResource("settings.fxml"));
+            Parent parent = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setAlwaysOnTop(true);
+
+            stage.setTitle("Settings");
+            stage.setScene(new Scene(parent));
+            stage.showAndWait();
+
+        } catch (Exception e) {
+
+        }
 
     }
 }
