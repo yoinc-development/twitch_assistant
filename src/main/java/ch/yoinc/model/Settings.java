@@ -37,4 +37,20 @@ public class Settings {
     public List<Assistant> getTa_assistants() {
         return ta_assistants;
     }
+
+    public void setTa_username(String ta_username) {
+        this.ta_username = ta_username;
+    }
+
+    public void setTa_api_twitch(String ta_api_twitch) {
+        this.ta_api_twitch = ta_api_twitch;
+    }
+
+    public void setTa_api_openai(String ta_api_openai) {
+        this.ta_api_openai = ta_api_openai;
+    }
+
+    public void setTa_google_credential_set(boolean ta_google_credential_set) {
+        this.ta_google_credential_set = ta_google_credential_set;
+    }
 }

@@ -9,25 +9,40 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DashboardController {
 
-    @FXML VBox northComponent;
-    @FXML VBox southComponent;
-    @FXML VBox westComponent;
-    @FXML ScrollPane eastComponent;
-    @FXML Button record_voice;
-    @FXML Button read_chat;
-    @FXML VBox chatbox;
-    @FXML ComboBox assistantsComboBox;
-    @FXML TextArea assistantDescriptionTextArea;
+    @FXML
+    BorderPane contentPane;
+    @FXML
+    VBox northComponent;
+    @FXML
+    VBox southComponent;
+    @FXML
+    VBox westComponent;
+    @FXML
+    ScrollPane eastComponent;
+    @FXML
+    Button record_voice;
+    @FXML
+    Button read_chat;
+    @FXML
+    VBox chatbox;
+    @FXML
+    ComboBox assistantsComboBox;
+    @FXML
+    TextArea assistantDescriptionTextArea;
 
     SpeechToTextService speechToTextService;
 
@@ -83,11 +98,11 @@ public class DashboardController {
 
         ResourceBundle bundle = ResourceBundle.getBundle("texts");
 
-        if(record_voice.getText().equals(bundle.getString("button_start_recording"))) {
+        if (record_voice.getText().equals(bundle.getString("button_start_recording"))) {
             speechToTextService.startRecording();
             record_voice.setText(bundle.getString("button_stop_recording"));
 
-            //northComponent.setDisable(true);
+            northComponent.setDisable(true);
             westComponent.setDisable(true);
 
         } else {
@@ -121,12 +136,12 @@ public class DashboardController {
     @FXML
     public void initialize() {
 
-        //handle all buttons with dependencies from settings
-        if(!SettingsManager.getInstance().getSettings().isTa_google_credential_set()) {
+        //handle all elements with dependencies from settings
+        if (!SettingsManager.getInstance().getSettings().isTa_google_credential_set()) {
             record_voice.setDisable(true);
         }
 
-        if(SettingsManager.getInstance().getSettings().getTa_api_twitch().isEmpty()) {
+        if (SettingsManager.getInstance().getSettings().getTa_api_twitch().isEmpty()) {
             read_chat.setDisable(true);
         }
 
@@ -136,24 +151,39 @@ public class DashboardController {
     @FXML
     public void handleSettings() {
         try {
-            northComponent.setDisable(true);
-            eastComponent.setDisable(true);
-            southComponent.setDisable(true);
-            westComponent.setDisable(true);
-
             FXMLLoader fxmlLoader = new FXMLLoader(TwitchAssistantApplication.class.getResource("settings.fxml"));
-            Parent parent = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setAlwaysOnTop(true);
+            Parent settingsRoot = (Parent) fxmlLoader.load();
+            Image icon = new Image(TwitchAssistantApplication.class.getResourceAsStream("/logo.jpg"));
 
+            SettingsController settingsController = fxmlLoader.getController();
+            settingsController.setData();
+            Stage stage = new Stage();
             stage.setTitle("Settings");
-            stage.setScene(new Scene(parent));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(false);
+            stage.setScene(new Scene(settingsRoot));
+            stage.getIcons().add(icon);
+
+            Stage currentStage = (Stage) contentPane.getScene().getWindow();
+            stage.initOwner(currentStage);
             stage.showAndWait();
 
+            if (!settingsController.closedProgrammatically) {
+                String font = getClass().getResource("/css/application.css").toExternalForm();
+                ButtonType confirm = new ButtonType(ResourceBundle.getBundle("texts").getString("button_confirm"), ButtonBar.ButtonData.OK_DONE);
+                Alert alert = new Alert(Alert.AlertType.WARNING, ResourceBundle.getBundle("texts").getString("alert_settings_instructions"), confirm);
+                alert.setTitle(ResourceBundle.getBundle("texts").getString("alert_settings_title"));
+                alert.setHeaderText("");
+                alert.getDialogPane().getScene().getStylesheets().add(font);
+                ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(icon);
+
+                Optional<ButtonType> result = alert.showAndWait();
+            }
+
+            initialize();
+
         } catch (Exception e) {
-
+            System.out.println("Exception");
         }
-
     }
 }

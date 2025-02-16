@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class TwitchAssistantApplication extends Application {
 
-    @Override   
+    @Override
     public void start(Stage stage) throws Exception {
 
         SettingsManager.getInstance();
@@ -27,7 +27,7 @@ public class TwitchAssistantApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(TwitchAssistantApplication.class.getResource("dashboard.fxml"));
         fxmlLoader.setResources(ResourceBundle.getBundle("texts"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 1000);
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         String font = getClass().getResource("/css/application.css").toExternalForm();
         scene.getStylesheets().add(font);
 
@@ -42,14 +42,14 @@ public class TwitchAssistantApplication extends Application {
 
         ButtonType confirm = new ButtonType(ResourceBundle.getBundle("texts").getString("button_confirm"), ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = ButtonType.CANCEL;
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,ResourceBundle.getBundle("texts").getString("alert_instructions"), confirm, cancel);
-        alert.setTitle(ResourceBundle.getBundle("texts").getString("alert_title"));
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, ResourceBundle.getBundle("texts").getString("alert_startup_instructions"), confirm, cancel);
+        alert.setTitle(ResourceBundle.getBundle("texts").getString("alert_startup_title"));
         alert.setHeaderText("");
         alert.getDialogPane().getScene().getStylesheets().add(font);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(icon);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.CANCEL) {
+        if (result.get() == ButtonType.CANCEL) {
             Platform.exit();
             System.exit(0);
         }
