@@ -1,61 +1,34 @@
 package ch.yoinc;
 
-import ch.yoinc.manager.SettingsManager;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
-import java.util.Optional;
-import java.util.ResourceBundle;
+@SpringBootApplication(scanBasePackages = "ch.yoinc")
+public class TwitchAssistantApplication {
 
-public class TwitchAssistantApplication extends Application {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
-        SettingsManager.getInstance();
-
-        stage.setOnCloseRequest(windowEvent -> {
-            SettingsManager.getInstance().saveSettingsOnClose();
-        });
-
-        FXMLLoader fxmlLoader = new FXMLLoader(TwitchAssistantApplication.class.getResource("dashboard.fxml"));
-        fxmlLoader.setResources(ResourceBundle.getBundle("texts"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
-        String font = getClass().getResource("/css/application.css").toExternalForm();
-        scene.getStylesheets().add(font);
-
-        Image icon = new Image(TwitchAssistantApplication.class.getResourceAsStream("/logo.jpg"));
-
-        stage.setTitle("Twitch Assistant");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.getIcons().add(icon);
-
-        stage.show();
-
-        ButtonType confirm = new ButtonType(ResourceBundle.getBundle("texts").getString("button_confirm"), ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancel = ButtonType.CANCEL;
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, ResourceBundle.getBundle("texts").getString("alert_startup_instructions"), confirm, cancel);
-        alert.setTitle(ResourceBundle.getBundle("texts").getString("alert_startup_title"));
-        alert.setHeaderText("");
-        alert.getDialogPane().getScene().getStylesheets().add(font);
-        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(icon);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.CANCEL) {
-            Platform.exit();
-            System.exit(0);
-        }
-    }
+    private static final Logger log = LoggerFactory.getLogger(TwitchAssistantApplication.class);
 
     public static void main(String[] args) {
-        launch();
+        log.info("Starting TwitchAssistantApplication...");
+        ApplicationContext ctx = SpringApplication.run(TwitchAssistantApplication.class, args);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

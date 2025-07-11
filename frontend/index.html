@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitch Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <div class="dropdown-container top">
+        <label for="assistant-select">Select an Assistant:</label>
+        <select id="assistant-select" class="dropdown">
+            <option value="">Loading assistants...</option>
+        </select>
+        <button id="edit-assistants"> Edit Assistants</button>
+    </div>
+    <div class="bottom">
+        <button id="start-recording" disabled="true"> Start Recording</button>
+        <button id="stop-recording" disabled="true"> Stop Recording</button>
+        <div>
+            <label for="chat-log">Chat Log</label>
+            <textarea id="chat-log" disabled="true"></textarea>
+        </div>
+    </div>
+</div>
+<script type="module" src="./renderer.js"></script>
+</body>
+</html>

@@ -2,11 +2,13 @@ package ch.yoinc.service;
 
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
+import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.*;
 import java.io.File;
 import java.nio.file.Files;
 
+@Service
 public class SpeechToTextService {
 
     private TargetDataLine targetDataLine;

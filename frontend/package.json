@@ -1,0 +1,36 @@
+{
+  "name": "twitch-assistant-frontend",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "dev": "vite",
+    "electron:dev": "cross-env NODE_ENV=development electron .",
+    "electron:build": "vite build",
+    "electron:start": "cross-env NODE_ENV=production electron .",
+    "build": "npm run electron:build && npm run electron:start",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "twitch",
+    "assistant",
+    "electron",
+    "spring-boot"
+  ],
+  "author": "Janes Thomas",
+  "license": "ISC",
+  "description": "A desktop client to manage an AI Twitch assistant.",
+  "dependencies": {
+    "electron": "^36.4.0",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "cross-env": "^7.0.3",
+    "vite": "^5.0.0"
+  }
+}
